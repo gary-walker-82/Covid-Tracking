@@ -1,5 +1,5 @@
-﻿$tenant = "blacklightsoftware"
-$username = "gary.walker@blacklightsoftware.com"
+﻿$tenant = ""
+$username = ""
 $siteScriptTitle = "Covid"
 $siteScriptDescription = ""
 $global:siteScriptId = "" 
@@ -69,6 +69,15 @@ $script = @'
       "isRequired": false,
       "group": "covid",
       "enforceUnique": false
+    },    
+    {
+      "verb": "createSiteColumn",
+      "fieldType": "Text",
+      "internalName": "cvdconsentgivenby",
+      "displayName": "Consent Given By",
+      "isRequired": false,
+      "group": "covid",
+      "enforceUnique": false
     },
     {
       "verb": "createSiteColumn",
@@ -81,22 +90,22 @@ $script = @'
     },
     {
       "verb": "createSiteColumnXml",
-      "schemaXml": "<Field Type=\"Choice\" DisplayName=\"Year Group\" Required=\"FALSE\" Format=\"Dropdown\" StaticName=\"cvdyeargroup\" Name=\"cvdyeargroup\"><Default></Default><CHOICES><CHOICE>7</CHOICE><CHOICE>8</CHOICE><CHOICE>9</CHOICE><CHOICE>10</CHOICE><CHOICE>11</CHOICE><CHOICE>12</CHOICE><CHOICE>13</CHOICE><CHOICE>Staff</CHOICE></CHOICES></Field>",
+      "schemaXml": "<Field Type=\"Choice\" Group=\"covid\" DisplayName=\"Year Group\" Required=\"FALSE\" Format=\"Dropdown\" StaticName=\"cvdyeargroup\" Name=\"cvdyeargroup\"><Default></Default><CHOICES><CHOICE>7</CHOICE><CHOICE>8</CHOICE><CHOICE>9</CHOICE><CHOICE>10</CHOICE><CHOICE>11</CHOICE><CHOICE>12</CHOICE><CHOICE>13</CHOICE><CHOICE>Staff</CHOICE></CHOICES></Field>",
       "pushChanges": true
     },
     {
       "verb": "createSiteColumnXml",
-      "schemaXml": "<Field Type=\"Choice\" DisplayName=\"Form Group\" Required=\"FALSE\" Format=\"Dropdown\" StaticName=\"cvdformgroup\" Name=\"cvdformgroup\"><Default></Default><CHOICES><CHOICE>7AW</CHOICE></CHOICES></Field>",
+      "schemaXml": "<Field Type=\"Choice\" Group=\"covid\" DisplayName=\"Form Group\" Required=\"FALSE\" Format=\"Dropdown\" StaticName=\"cvdformgroup\" Name=\"cvdformgroup\"><Default></Default><CHOICES><CHOICE>7AW</CHOICE></CHOICES></Field>",
       "pushChanges": true
     },
     {
       "verb": "createSiteColumnXml",
-      "schemaXml": "<Field Type=\"Choice\" DisplayName=\"Test Result\" Required=\"FALSE\" Format=\"Dropdown\" StaticName=\"cvdtestresult\" Name=\"cvdtestresult\"><Default></Default><CHOICES><CHOICE>Positive</CHOICE><CHOICE>Negative</CHOICE><CHOICE>Inconclusive</CHOICE></CHOICES></Field>",
+      "schemaXml": "<Field Type=\"Choice\" Group=\"covid\" DisplayName=\"Test Result\" Required=\"FALSE\" Format=\"Dropdown\" StaticName=\"cvdtestresult\" Name=\"cvdtestresult\"><Default></Default><CHOICES><CHOICE>Positive</CHOICE><CHOICE>Negative</CHOICE><CHOICE>Inconclusive</CHOICE></CHOICES></Field>",
       "pushChanges": true
     },
     {
       "verb": "createSiteColumnXml",
-      "schemaXml": "<Field Type=\"Choice\" DisplayName=\"Consent Provided\" Required=\"FALSE\" Format=\"Dropdown\" StaticName=\"cvdconsentprovided\" Name=\"cvdconsentprovided\"><Default>Waiting</Default><CHOICES><CHOICE>Given</CHOICE><CHOICE>Rejected</CHOICE></CHOICES></Field>",
+      "schemaXml": "<Field Type=\"Choice\" Group=\"covid\" DisplayName=\"Consent Provided\" Required=\"FALSE\" Format=\"Dropdown\" StaticName=\"cvdconsentprovided\" Name=\"cvdconsentprovided\"><Default>Waiting</Default><CHOICES><CHOICE>Given</CHOICE><CHOICE>Rejected</CHOICE></CHOICES></Field>",
       "pushChanges": true
     },
     {
@@ -130,6 +139,10 @@ $script = @'
         {
           "verb": "addSiteColumn",
           "internalName": "cvdconsentprovided"
+        },
+        {
+          "verb": "addSiteColumn",
+          "internalName": "cvdconsentgivenby"
         }
       ]
     },
@@ -203,7 +216,8 @@ $script = @'
             "cvdyeargroup",
             "cvdformgroup",
             "cvdconsentprovided",
-            "cvddateofconsent"
+            "cvddateofconsent",
+            "cvdconsentgivenby"
           ]
         },
         {
@@ -221,7 +235,8 @@ $script = @'
             "cvdyeargroup",
             "cvdformgroup",
             "cvdconsentprovided",
-            "cvddateofconsent"
+            "cvddateofconsent",
+            "cvdconsentgivenby"
           ]
         },
         {
@@ -239,7 +254,8 @@ $script = @'
             "cvdyeargroup",
             "cvdformgroup",
             "cvdconsentprovided",
-            "cvddateofconsent"
+            "cvddateofconsent",
+            "cvdconsentgivenby"
           ]
         },
         {
@@ -257,7 +273,8 @@ $script = @'
             "cvdyeargroup",
             "cvdformgroup",
             "cvdconsentprovided",
-            "cvddateofconsent"
+            "cvddateofconsent",
+            "cvdconsentgivenby"
           ]
         },
         {
@@ -355,7 +372,7 @@ $script = @'
   "version": 1
 }
 '@
-Connect-SPOService -Url https://blacklightsoftware-admin.sharepoint.com -Credential $username
+Connect-SPOService -Url https://$tenant-admin.sharepoint.com -Credential $username
 addSiteScript $siteScriptTitle $siteScriptDescription $script
 
 function addToSiteDesign($siteDesignTitle) {
@@ -386,4 +403,4 @@ function addToNewSiteDesign($siteDesignTitle,$siteDesignWebTemplate, $siteScript
     Add-SPOSiteDesign -Title $siteDesignTitle -WebTemplate $siteDesignWebTemplate -SiteScripts $siteScriptId
   }
 }
-addToNewSiteDesign "Covid" 64 $global:siteScriptId
+addToNewSiteDesign $siteScriptTitle 64 $global:siteScriptId
